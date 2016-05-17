@@ -1,4 +1,5 @@
 #include "board.h"
+#include <cassert>
 #include <iostream>
 
 Cell* Board::getCell(int row, int col){
@@ -174,11 +175,7 @@ void Board::readBoardFromString(std::string s){
 		if(s.at(i) >= '1' && s.at(i) <= '9'){
 			row = i/getSize();
 			col = i % getSize();
-			// Try to assign next value
-			if(!assign(getCell(row, col), s.at(i) - '0')){
-				std::cerr << "Invalid Sudoku board" << std::endl;
-				return;
-			}
+			assert(assign(getCell(row, col), s.at(i) - '0'));
 			i++;
 		}
 		else if(s.at(i) == '0' || s.at(i) == '.'){

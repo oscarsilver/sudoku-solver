@@ -36,9 +36,9 @@ void solveAllInFile(std::string filename){
 				sudoku += line;
 				lineCount++;
 				if(lineCount == 9){
-				solveSudoku(solver, sudoku);
-				lineCount = 0;
-				sudoku.clear();
+					solveSudoku(solver, sudoku);
+					lineCount = 0;
+					sudoku.clear();
 				}
 			}
 		}
