@@ -13,8 +13,8 @@ all: sudokusolver
 sudokusolver: main.cc $(OBJS)
 	$(CXX) $(CPPFLAGS) -o sudokusolver $(OBJS)
 
-test: test.cc $(OBJS)
-	$(CXX) $(CPPFLAGS) $(LIB) -o test test.o $(OBJS) -lgtest
+#test: test.cc $(OBJS)
+#	$(CXX) $(CPPFLAGS) $(LIB) -o test test.o $(OBJS) -lgtest
 
 clean:
 	$(RM) $(OBJS) main.o test.o sudokusolver test
