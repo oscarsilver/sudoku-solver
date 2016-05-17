@@ -1,7 +1,5 @@
 #include "board.h"
-#include <algorithm>
 #include <iostream>
-#include <set>
 
 Cell* Board::getCell(int row, int col){
 	if(row >= getSize()){
@@ -23,7 +21,7 @@ int Board::getSquareSize() const{
 	return _squareSize;
 }
 
-bool Board::isSolved(){
+bool Board::isSolved() const{
 	for(Cell c : _cells){
 		if(c.getPossibleValueCount() != 1){
 			return false;
@@ -32,6 +30,10 @@ bool Board::isSolved(){
 	return true;
 }
 
+/*		
+ *	Tries to eliminate all other values from the cell.
+ *  Returns true if val was successfully assigned to the cell. 
+ */
 bool Board::assign(Cell* c, int val){
 	for(int i = 1; i <= getSize(); i++){
 		if(i != val){
@@ -43,6 +45,9 @@ bool Board::assign(Cell* c, int val){
 	return true;
 }
 
+/*		
+ *	Returns a pointer to the Cell with least possible values
+ */
 Cell* Board::getMostConstrainedCell(){
 	int nPossibleValues = getSize();
 	int minCell = 0;
@@ -55,6 +60,11 @@ Cell* Board::getMostConstrainedCell(){
 	return &_cells.at(minCell);
 }
 
+
+/*		
+ *	Returns true if val is successfully eliminated from all cells in the same
+ *  row as the cell corresponding to row and col
+ */
 bool Board::eliminateRow(int row, int col, int val){
 	for(int i = 0; i < getSize(); i++){
 		if(i == row){
@@ -67,6 +77,10 @@ bool Board::eliminateRow(int row, int col, int val){
 	return true;
 }
 
+/*		
+ *	Returns true if val is successfully eliminated from all cells in the same
+ *  column as the cell corresponding to row and col
+ */
 bool Board::eliminateCol(int row, int col, int val){
 	for(int i = 0; i < getSize(); i++){
 		if(i == col){
@@ -79,10 +93,17 @@ bool Board::eliminateCol(int row, int col, int val){
 	return true;
 }
 
+/*
+ *	Returns true if two cells are in the same square
+ */
 bool isInSameSquare(int r1, int r2, int c1, int c2, int squareSize){
 	return r1/squareSize == r2/squareSize && c1/squareSize == c2/squareSize;
 }
 
+/*		
+ *	Returns true if val is successfully eliminated from all cells in the same
+ *  square as the cell corresponding to row and col
+ */
 bool Board::eliminateSquare(int row, int col, int val){
 	for(int i = 0; i < getSize(); i++){
 		for(int j = 0; j < getSize(); j++){
@@ -99,9 +120,12 @@ bool Board::eliminateSquare(int row, int col, int val){
 	return true;
 }
 
-// Returns true if value was successfully eliminated
+/*		
+ *	Returns true if the value is successfully eliminated from the cell
+ */
 bool Board::eliminate(Cell* c, int val){
 	if(!c->isPossible(val)){
+		// The value is already eliminated
 		return true;
 	}
 	c->eliminateValue(val);
@@ -109,9 +133,12 @@ bool Board::eliminate(Cell* c, int val){
 	int nPossibleValues = c->getPossibleValueCount();
 
 	if(nPossibleValues == 0){
+		// Should not remove the last possible value of a cell
 		return false;
 	}
 	else if(nPossibleValues == 1){
+		// If there is only one remaining value it should be removed from all
+		// other cells in the same row, column and square as this cell
 		if(!eliminateRow(c->getRow(), c->getCol(), c->getValue())){
 			return false;
 		}
@@ -125,10 +152,9 @@ bool Board::eliminate(Cell* c, int val){
 	return true;
 }
 
-void removeSpacesFromString(std::string& s){
-	s.erase(std::remove_if(s.begin(), s.end(), isspace), s.end());
-}
-
+/*		
+ *	Sets row and column number for all cells
+ */
 void Board::initBoard(){
 	int row = 0; int col = 0;
 	for(int i = 0; i < getSize()*getSize(); i++){
@@ -137,14 +163,18 @@ void Board::initBoard(){
 	}
 }
 
+/*		
+ *	Intializes a board and assigns values to it
+ *  from the input string
+ */
 void Board::readBoardFromString(std::string s){
 	initBoard();
-	removeSpacesFromString(s);
 	int i = 0, row = 0, col = 0;
 	while(i < getSize()*getSize()){
 		if(s.at(i) >= '1' && s.at(i) <= '9'){
 			row = i/getSize();
 			col = i % getSize();
+			// Try to assign next value
 			if(!assign(getCell(row, col), s.at(i) - '0')){
 				std::cerr << "Invalid Sudoku board" << std::endl;
 				return;
@@ -164,7 +194,6 @@ void printHorizontalLine(std::string separator, int length){
 }
 
 void Board::printBoard(){
-	std::cout << "Printing board" << std::endl;
 	printHorizontalLine("==", getSize() + getSquareSize());
 	std::cout << std::endl;
 	for(int i = 0; i < getSize(); i++){

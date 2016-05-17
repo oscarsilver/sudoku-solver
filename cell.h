@@ -3,7 +3,7 @@
 *
 * Filename: cell.h
 * Description: Represents a Cell in the Sudoku board. 
-* Keeps track of the possible values that can be set in the Cell.
+* Keeps track of the possible values that can be assigned to the Cell.
 *
 */
 

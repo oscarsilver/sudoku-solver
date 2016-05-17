@@ -2,14 +2,14 @@
 * Author: Oscar Silver
 *
 * Filename: board.h
-* Description: Represents a Sudoku board.
-* Also provides logic to check if the board is solved.
 *
+* Description: 
+* Represents a Sudokuboard. Responsible for checking that assignment of values
+* to its cells are valid.
 */
 #ifndef _BOARD_H_
 #define _BOARD_H_
 
-#include <cmath>
 #include <string>
 #include <vector>
 #include "cell.h"
@@ -31,13 +31,12 @@ public:
 	int getSize() const;
 	int getSquareSize() const;
 
-	bool isSolved();
+	bool isSolved() const;
 	bool assign(Cell*, int);
 	bool eliminate(Cell*, int);
 
 	void readBoardFromString(std::string);
 	void printBoard();
 };
-
 
 #endif

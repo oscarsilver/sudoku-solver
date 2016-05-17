@@ -21,6 +21,9 @@ void Cell::setCol(int col){
 	_col = col;
 }
 
+/*
+ *	Returns a vector containing all possible values for this cell
+ */
 std::vector<int> Cell::getPossibleValues() const{
 	std::vector<int> values;
 	for(int i = 1; i <= _possibleValues.size(); i++){

@@ -3,33 +3,42 @@
 #include "board.h"
 #include "solver.h"
 
-/*
-void solveSudoku(Solver solver, std::string sodukoString, int size){
-	Board* b = new Board(size);
-	b->readBoardFromString(sodukoString);
+const std::string SEPARATOR = "=========";
+
+void solveSudoku(Solver solver, std::string sudokuString){
+	std::cout << "Solving..." << std::endl;
+	std::unique_ptr<Board> b = std::unique_ptr<Board>(new Board());
+
+	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+	b->readBoardFromString(sudokuString);
+	b = solver.solve(std::move(b));
 	b->printBoard();
-	solver.solve(b);
+	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+	auto duration = std::chrono::duration<float, std::chrono::milliseconds::period>(end - begin).count();
+	std::cout << "Solved in " << duration<< " milliseconds" << std::endl;
 }
 
-void solveAllInFile(std::string filename, int sudokuSize){
+void solveAllInFile(std::string filename){
 	int lineCount = 0;
 	Solver solver;
 	std::ifstream inFile;
 	std::string line;
 	std::string sudoku;
 
-	inFile.open("Boards/" + filename);
+	inFile.open(filename);
 
 	if(inFile.is_open()){
 		std::cout << "Solving all sudokus in file " << filename << std::endl;
 		while(getline(inFile, line)){
-			sudoku += line;
-			lineCount++;
-			if(lineCount == sudokuSize){
-				std::cout << "Solving: " << std::endl;
-				solveSudoku(solver, sudoku, sudokuSize);
+			if(line != SEPARATOR){
+				sudoku += line;
+				lineCount++;
+				if(lineCount == 9){
+				solveSudoku(solver, sudoku);
 				lineCount = 0;
 				sudoku.clear();
+				}
 			}
 		}
 		inFile.close();
@@ -39,20 +48,7 @@ void solveAllInFile(std::string filename, int sudokuSize){
 	}	
 }
 
-*/
-const std::string sampleBoard = "020810740700003100090002805009040087400208003160030200302700060005600008076051090";
-const std::string testBoard = "200000000000000000000000000000000000000000000000000000000000000000000000000000093";
-const std::string solvedBoard = "523816749784593126691472835239145687457268913168937254342789561915624378876351492";
-const std::string harderBoard = "001900003900700160030005007050000009004302600200000070600100030042007006500006800";
-const std::string evenHarderBoard = "043080250600000000000001094900004070000608000010200003820500000000000005034090710";
-
 int main(){
-	Board* board = new Board();
-	board->readBoardFromString(evenHarderBoard);
-	Solver solver;
-	std::unique_ptr<Board> b = solver.solve(std::unique_ptr<Board>(board));
-	b->printBoard();
-	//std::cout << std::boolalpha << solver.solve(std::unique_ptr<Board>(board)) << std::endl;
-	
+	solveAllInFile("sudoku.txt");
 	return 0;
 }

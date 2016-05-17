@@ -1,7 +1,10 @@
 /*
 * Author: Oscar Silver
 * Filename: solver.h
-* Description: Takes a pointer to an unsolved sudoku board and returns a solved board.
+* Description: 
+* Takes a sudoku board and tries to solve it recursivly.
+* If a solution is found the solved board is returned. If no solution is found
+* a nullptr is returned.
 */
 #ifndef _SOLVER_H_
 #define _SOLVER_H_
