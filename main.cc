@@ -11,12 +11,13 @@ void solveSudoku(Solver solver, std::string sudokuString){
 
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 	b->readBoardFromString(sudokuString);
-	b = solver.solve(std::move(b));
 	b->printBoard();
-	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+	b = solver.solve(std::move(b));
 
+	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 	auto duration = std::chrono::duration<float, std::chrono::milliseconds::period>(end - begin).count();
 	std::cout << "Solved in " << duration<< " milliseconds" << std::endl;
+	b->printBoard();
 }
 
 void solveAllInFile(std::string filename){

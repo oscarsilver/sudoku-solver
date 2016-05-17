@@ -181,7 +181,7 @@ void Board::readBoardFromString(std::string s){
 			}
 			i++;
 		}
-		else if(s.at(i) == '0'){
+		else if(s.at(i) == '0' || s.at(i) == '.'){
 			i++;
 		}
 	}
@@ -198,7 +198,12 @@ void Board::printBoard(){
 	std::cout << std::endl;
 	for(int i = 0; i < getSize(); i++){
 		for(int j = 0; j < getSize(); j++){
-			std::cout << getCell(i,j) -> getValue() << " ";
+			if(getCell(i,j) -> getPossibleValueCount() > 1){
+				std::cout << ". ";
+			}
+			else{
+				std::cout << getCell(i,j) -> getValue() << " ";
+			}
 			if((j + 1) % getSquareSize() == 0 && j + 1 != getSize()){
 				std::cout << "| ";
 			}
