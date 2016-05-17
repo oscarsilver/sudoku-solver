@@ -143,25 +143,26 @@ void Board::readBoardFromString(std::string s){
 			i++;
 		}
 	}
-
 	printBoard();
 }
 
 void printHorizontalLine(std::string separator, int length){
-	for(int i = 0; i < length; i++){
+	for(int i = 1; i < length; i++){
 		std::cout << separator;
 	}
 }
 
 void Board::printBoard(){
+	printHorizontalLine("==", getSize() + getSquareSize());
+	std::cout << std::endl;
 	for(int i = 0; i < getSize(); i++){
 		for(int j = 0; j < getSize(); j++){
-			std::cout << getCell(i,j) -> getValue() << " ";
-			if((j + 1) % getSquareSize() == 0){
+			std::cout << getCell(i,j) -> getPossibleValueCount() << " ";
+			if((j + 1) % getSquareSize() == 0 && j + 1 != getSize()){
 				std::cout << "| ";
 			}
 		}
-		if((i + 1) % getSquareSize() == 0){
+		if((i + 1) % getSquareSize() == 0 && i + 1 != getSize()){
 			std::cout << std::endl;
 			printHorizontalLine("- ", getSize() + getSquareSize());
 		}
