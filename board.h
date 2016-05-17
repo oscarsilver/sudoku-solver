@@ -26,10 +26,8 @@ private:
 	void initBoard();
 public:
 	Board() : _size(9), _squareSize(3), _cells(_size*_size, Cell(_size)){}
-	Board(int size) : _size(size), _cells(_size*_size){
-		_squareSize = sqrt(_size);
-	}
 	Cell* getCell(int, int);
+	Cell* getMostConstrainedCell();
 	int getSize() const;
 	int getSquareSize() const;
 

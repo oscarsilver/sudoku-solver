@@ -43,6 +43,18 @@ bool Board::assign(Cell* c, int val){
 	return true;
 }
 
+Cell* Board::getMostConstrainedCell(){
+	int nPossibleValues = getSize();
+	int minCell = 0;
+	for(int i = 0; i < _cells.size(); i++){
+		if(_cells.at(i).getPossibleValueCount() < nPossibleValues && _cells.at(i).getPossibleValueCount() > 1){
+			nPossibleValues = _cells.at(i).getPossibleValueCount();
+			minCell = i;
+		}
+	}
+	return &_cells.at(minCell);
+}
+
 bool Board::eliminateRow(int row, int col, int val){
 	for(int i = 0; i < getSize(); i++){
 		if(i == row){
@@ -143,7 +155,6 @@ void Board::readBoardFromString(std::string s){
 			i++;
 		}
 	}
-	printBoard();
 }
 
 void printHorizontalLine(std::string separator, int length){
@@ -153,11 +164,12 @@ void printHorizontalLine(std::string separator, int length){
 }
 
 void Board::printBoard(){
+	std::cout << "Printing board" << std::endl;
 	printHorizontalLine("==", getSize() + getSquareSize());
 	std::cout << std::endl;
 	for(int i = 0; i < getSize(); i++){
 		for(int j = 0; j < getSize(); j++){
-			std::cout << getCell(i,j) -> getPossibleValueCount() << " ";
+			std::cout << getCell(i,j) -> getValue() << " ";
 			if((j + 1) % getSquareSize() == 0 && j + 1 != getSize()){
 				std::cout << "| ";
 			}
