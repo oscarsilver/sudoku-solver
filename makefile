@@ -5,19 +5,19 @@ CPPFLAGS = -std=c++11 ${INC}
 LIB = -L/usr/local/lib
 RM = rm -f
 
-SRCS = test.cc
+SRCS = cell.cc board.cc solver.cc 
 OBJS = $(subst .cc,.o,$(SRCS))
 
 all: sudokusolver
 
-test: $(OBJS)
-	$(CXX) $(CPPFLAGS) $(LIB) -o test $(OBJS) -lgtest
+sudokusolver: main.cc $(OBJS)
+	$(CXX) $(CPPFLAGS) -o sudokusolver main.o $(OBJS)
 
-sudokusolver: $(OBJS)
-	$(CXX) $(CPPFLAGS) $(LIB) -o sudokusolver $(OBJS) -lgtest
+test: test.cc $(OBJS)
+	$(CXX) $(CPPFLAGS) $(LIB) -o test test.o $(OBJS) -lgtest
 
 clean:
-	$(RM) $(OBJS)
+	$(RM) $(OBJS) main.o test.o sudokusolver test
 
 dist-clean: clean
 	$(RM) tool
