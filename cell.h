@@ -14,27 +14,21 @@
 
 class Cell{
 private:
-	int _value;
-	int _row;
+	std::vector<bool> _possibleValues;
 	int _col;
-	bool _filled;
-	std::vector<bool> possibleValues;
+	int _row;
 public:
 	Cell() {}
-	Cell(int boardSize) : _value(0), possibleValues(boardSize, true){}
+	Cell(int boardSize) : _possibleValues(boardSize, true){}
 
 	int getValue() const;
-	int getRow() const;
 	int getCol() const;
-	std::vector<int> getPossibleValues() const;
-	int getPossibleValueCount() const;
-
-	void setValue(int);
+	int getRow() const;
 	void setRow(int);
 	void setCol(int);
-	void setEmpty();
-
-	bool isEmpty();
+	std::vector<int> getPossibleValues() const;
+	int getPossibleValueCount() const;
+	bool isPossible(int);
 	void eliminateValue(int);
 };
 

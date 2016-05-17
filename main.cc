@@ -3,6 +3,7 @@
 #include "board.h"
 #include "solver.h"
 
+/*
 void solveSudoku(Solver solver, std::string sodukoString, int size){
 	Board* b = new Board(size);
 	b->readBoardFromString(sodukoString);
@@ -38,7 +39,13 @@ void solveAllInFile(std::string filename, int sudokuSize){
 	}	
 }
 
+*/
+const std::string sampleBoard = "020810740700003100090002805009040087400208003160030200302700060005600008076051090";
+const std::string testBoard = "200000000000000000000000000000000000000000000000000000000000000000000000000000000";
+const std::string solvedBoard = "523816749784593126691472835239145687457268913168937254342789561915624378876351492";
+
 int main(){
-	solveAllInFile("small-sudoku.txt", 9);
+	Board board;
+	board.readBoardFromString(solvedBoard);
 	return 0;
 }

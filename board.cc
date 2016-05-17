@@ -23,86 +23,133 @@ int Board::getSquareSize() const{
 	return _squareSize;
 }
 
-std::vector<Cell> Board::getCells() const{
-	return _cells;
-}
-
-void Board::setEmptyBoard(){
-	for(Cell& c : _cells){
-		c.setEmpty();
-	}
-}
-
 bool Board::isSolved(){
-	bool solved = false;
-	for(int i = 0; i < getSize(); i++){
-		solved = isRowSolved(i) && isColSolved(i);
-	}
-	return solved && isSquareSolved();
-}
-
-bool Board::isRowSolved(int row){
-	std::set<int> filled;
-	int val;
-	for(int j = 0; j < getSize(); j++){
-		val = getCell(row,j) -> getValue();
-		if(val != 0){
-			filled.insert(val);
+	for(Cell c : _cells){
+		if(c.getPossibleValueCount() != 1){
+			return false;
 		}
 	}
-	return filled.size() == getSize();
+	return true;
 }
 
-bool Board::isColSolved(int col){
-	std::set<int> filled;
-	int val;
-	for(int i = 0; i < getSize(); i++){
-		val = getCell(i, col) -> getValue();
-		if(val != 0){
-			filled.insert(val);
-		}
-	}
-	return filled.size() == getSize();
-}
-
-bool Board::isSquareSolved(){
-	std::set<int> filled;
-	int val;
-	for(int i = 0; i < getSize(); i++){
-		for(int j = 0; j < getSize(); j++){
-			val = getCell((i/3)*3 + j/3, i*3 % 9 + j % 3) -> getValue();
-			if(val != 0){
-				filled.insert(val);
+bool Board::assign(Cell* c, int val){
+	for(int i = 1; i <= getSize(); i++){
+		if(i != val){
+			if(!eliminate(c, i)){
+				return false;
 			}
 		}
 	}
-	return filled.size() == getSize();
+	return true;
+}
+
+bool Board::eliminateRow(int row, int col, int val){
+	for(int i = 0; i < getSize(); i++){
+		if(i == row){
+			continue;
+		}
+		else if(!eliminate(getCell(i, col), val)){
+			return false;
+		}
+	}
+	return true;
+}
+
+bool Board::eliminateCol(int row, int col, int val){
+	for(int i = 0; i < getSize(); i++){
+		if(i == col){
+			continue;
+		}
+		else if(!eliminate(getCell(row, i), val)){
+			return false;
+		}
+	}
+	return true;
+}
+
+bool isInSameSquare(int r1, int r2, int c1, int c2, int squareSize){
+	return r1/squareSize == r2/squareSize && c1/squareSize == c2/squareSize;
+}
+
+bool Board::eliminateSquare(int row, int col, int val){
+	for(int i = 0; i < getSize(); i++){
+		for(int j = 0; j < getSize(); j++){
+			if(isInSameSquare(row, i, col, j, getSquareSize())){
+				if(i == row && j == col){
+					continue;
+				}
+				else if(!eliminate(getCell(i,j), val)){
+					return false;
+				}
+			}
+		}
+	}
+	return true;
+}
+
+// Returns true if value was successfully eliminated
+bool Board::eliminate(Cell* c, int val){
+	if(!c->isPossible(val)){
+		return true;
+	}
+	c->eliminateValue(val);
+	
+	int nPossibleValues = c->getPossibleValueCount();
+
+	if(nPossibleValues == 0){
+		return false;
+	}
+	else if(nPossibleValues == 1){
+		if(!eliminateRow(c->getRow(), c->getCol(), c->getValue())){
+			return false;
+		}
+		else if(!eliminateCol(c->getRow(), c->getCol(), c->getValue())){
+			return false;
+		}
+		else if(!eliminateSquare(c->getRow(), c->getCol(), c->getValue())){
+			return false;
+		}
+	}
+	return true;
 }
 
 void removeSpacesFromString(std::string& s){
 	s.erase(std::remove_if(s.begin(), s.end(), isspace), s.end());
 }
 
-void Board::readBoardFromString(std::string s){
-	setEmptyBoard();
-	removeSpacesFromString(s);
-	if(s.size() < getSize()*getSize()){
-		throw std::exception();
-	}
-	int row, col, i = 0;
-	while(i < getSize()*getSize()){
-		row = i/getSize();
-		col = i % getSize();
-		getCell(row,col) -> setValue(s.at(i) - '0');
-		getCell(row,col) -> setRow(row);
-		getCell(row,col) -> setCol(col);
-		i++;
+void Board::initBoard(){
+	int row = 0; int col = 0;
+	for(int i = 0; i < getSize()*getSize(); i++){
+		_cells.at(i).setRow(i/getSize());
+		_cells.at(i).setCol(i % getSize());
 	}
 }
 
-void printHorizontalLine(std::string style, int length){
+void Board::readBoardFromString(std::string s){
+	initBoard();
+	removeSpacesFromString(s);
+	int i = 0, row = 0, col = 0;
+	while(i < getSize()*getSize()){
+		if(s.at(i) >= '1' && s.at(i) <= '9'){
+			row = i/getSize();
+			col = i % getSize();
+			if(!assign(getCell(row, col), s.at(i) - '0')){
+				std::cerr << "Invalid Sudoku board" << std::endl;
+				return;
+			}
+			i++;
+		}
+		else if(s.at(i) == '0'){
+			i++;
+		}
+	}
+
+	printBoard();
+}
+
+void printHorizontalLine(std::string separator, int length){
 	for(int i = 0; i < length; i++){
-		std::cout << style;
+		std::cout << separator;
 	}
 }
 

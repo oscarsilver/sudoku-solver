@@ -1,33 +1,16 @@
 #include "cell.h"
 
 int Cell::getValue() const{
-	return _value;
-}
-
-int Cell::getRow() const{
-	return _row;
+	auto it = std::find(_possibleValues.begin(), _possibleValues.end(), true);
+	return it != _possibleValues.end() ? 1 + it - _possibleValues.begin() : -1;
 }
 
 int Cell::getCol() const{
 	return _col;
 }
 
-std::vector<int> Cell::getPossibleValues() const{
-	std::vector<int> values;
-	for(int i = 1; i <= possibleValues.size(); i++){
-		if(possibleValues.at(i - 1)){
-			values.push_back(i);
-		}
-	}
-	return values;
-}
-
-int Cell::getPossibleValueCount() const{
-	int res = 0;
-	for(bool b : possibleValues){
-		if(b) res++;
-	}
-	return res;
+int Cell::getRow() const{
+	return _row;
 }
 
 void Cell::setRow(int row){
@@ -38,22 +21,24 @@ void Cell::setCol(int col){
 	_col = col;
 }
 
-void Cell::setValue(int value){
-	_value = value;
-	if(_value != 0){
-		_filled = true;
+std::vector<int> Cell::getPossibleValues() const{
+	std::vector<int> values;
+	for(int i = 1; i <= _possibleValues.size(); i++){
+		if(_possibleValues.at(i - 1)){
+			values.push_back(i);
+		}
 	}
+	return values;
 }
 
-void Cell::setEmpty(){
-	_value = 0;
-	_filled = false;
+int Cell::getPossibleValueCount() const{
+	return std::count(_possibleValues.begin(), _possibleValues.end(), true);
 }
 
-bool Cell::isEmpty(){
-	return !_filled;
+bool Cell::isPossible(int val){
+	return _possibleValues.at(val - 1);
 }
 
 void Cell::eliminateValue(int value){
-	possibleValues.at(value - 1) = false;
+	_possibleValues.at(value - 1) = false;
 }

@@ -20,22 +20,23 @@ private:
 	int _squareSize;
 	std::vector<Cell> _cells;
 
-	bool isRowSolved(int);
- 	bool isColSolved(int);
- 	bool isSquareSolved();
+	bool eliminateRow(int, int, int);
+	bool eliminateCol(int, int, int);
+	bool eliminateSquare(int, int, int);
+	void initBoard();
 public:
 	Board() : _size(9), _squareSize(3), _cells(_size*_size, Cell(_size)){}
-	Board(int size) : _size(size), _cells(_size*_size, Cell(_size)){
+	Board(int size) : _size(size), _cells(_size*_size){
 		_squareSize = sqrt(_size);
 	}
 	Cell* getCell(int, int);
-	std::vector<Cell> getCells() const;
 	int getSize() const;
 	int getSquareSize() const;
 
 	bool isSolved();
+	bool assign(Cell*, int);
+	bool eliminate(Cell*, int);
 
-	void setEmptyBoard();
 	void readBoardFromString(std::string);
 	void printBoard();
 };
