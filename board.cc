@@ -31,10 +31,6 @@ bool Board::isSolved() const{
 	return true;
 }
 
-/*		
- *	Tries to eliminate all other values from the cell.
- *  Returns true if val was successfully assigned to the cell. 
- */
 bool Board::assign(Cell* c, int val){
 	for(int i = 1; i <= getSize(); i++){
 		if(i != val){
@@ -46,9 +42,6 @@ bool Board::assign(Cell* c, int val){
 	return true;
 }
 
-/*		
- *	Returns a pointer to the Cell with least possible values
- */
 Cell* Board::getMostConstrainedCell(){
 	int nPossibleValues = getSize();
 	int minCell = 0;
@@ -61,11 +54,6 @@ Cell* Board::getMostConstrainedCell(){
 	return &_cells.at(minCell);
 }
 
-
-/*		
- *	Returns true if val is successfully eliminated from all cells in the same
- *  row as the cell corresponding to row and col
- */
 bool Board::eliminateRow(int row, int col, int val){
 	for(int i = 0; i < getSize(); i++){
 		if(i == row){
@@ -78,10 +66,6 @@ bool Board::eliminateRow(int row, int col, int val){
 	return true;
 }
 
-/*		
- *	Returns true if val is successfully eliminated from all cells in the same
- *  column as the cell corresponding to row and col
- */
 bool Board::eliminateCol(int row, int col, int val){
 	for(int i = 0; i < getSize(); i++){
 		if(i == col){
@@ -101,10 +85,6 @@ bool isInSameSquare(int r1, int r2, int c1, int c2, int squareSize){
 	return r1/squareSize == r2/squareSize && c1/squareSize == c2/squareSize;
 }
 
-/*		
- *	Returns true if val is successfully eliminated from all cells in the same
- *  square as the cell corresponding to row and col
- */
 bool Board::eliminateSquare(int row, int col, int val){
 	for(int i = 0; i < getSize(); i++){
 		for(int j = 0; j < getSize(); j++){
@@ -121,9 +101,6 @@ bool Board::eliminateSquare(int row, int col, int val){
 	return true;
 }
 
-/*		
- *	Returns true if the value is successfully eliminated from the cell
- */
 bool Board::eliminate(Cell* c, int val){
 	if(!c->isPossible(val)){
 		// The value is already eliminated
@@ -153,9 +130,6 @@ bool Board::eliminate(Cell* c, int val){
 	return true;
 }
 
-/*		
- *	Sets row and column number for all cells
- */
 void Board::initBoard(){
 	int row = 0; int col = 0;
 	for(int i = 0; i < getSize()*getSize(); i++){
@@ -164,10 +138,6 @@ void Board::initBoard(){
 	}
 }
 
-/*		
- *	Intializes a board and assigns values to it
- *  from the input string
- */
 bool Board::readBoardFromString(std::string s){
 	initBoard();
 	int i = 0, row = 0, col = 0;
