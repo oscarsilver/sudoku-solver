@@ -9,15 +9,15 @@ std::unique_ptr<Board> Solver::solve(std::unique_ptr<Board> board){
 		return board;
 	}
 
-	Cell* c = board -> getMostConstrainedCell();
-	for(int i : c -> getPossibleValues()){
+	Cell* nextCell = board -> getMostConstrainedCell();
+	for(int possibleValue : nextCell -> getPossibleValues()){
 		// Try to assign each possible value to the most constrained cell
-		std::unique_ptr<Board> b(new Board(*board));
-		if(b->assign(b->getCell(c->getRow(), c->getCol()), i)){
+		std::unique_ptr<Board> copyBoard(new Board(*board));
+		if(copyBoard->assign(copyBoard->getCell(nextCell->getRow(), nextCell->getCol()), possibleValue)){
 			// Recursivly solve all boards where a possible value was 
 			// successfully assigned
-			if(std::unique_ptr<Board> newBoard = solve(std::move(b))){
-				return newBoard;
+			if((copyBoard = solve(std::move(copyBoard)))){
+				return copyBoard;
 			}
 		}
 	}
