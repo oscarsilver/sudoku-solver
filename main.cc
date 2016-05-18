@@ -4,11 +4,12 @@
 #include "solver.h"
 
 const std::string SEPARATOR = "=========";
+const int SUDOKU_SIZE = 9;
 
-void solveSudoku(Solver solver, std::string sudokuString){
+void solveSudoku(std::string sudokuString){
 	std::cout << "Solving..." << std::endl;
 	std::unique_ptr<Board> b = std::unique_ptr<Board>(new Board());
-
+	Solver solver;
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 	if(b->readBoardFromString(sudokuString)){
 		b->printBoard();
@@ -26,7 +27,6 @@ void solveSudoku(Solver solver, std::string sudokuString){
 
 void solveAllInFile(std::string filename){
 	int lineCount = 0;
-	Solver solver;
 	std::ifstream inFile;
 	std::string line;
 	std::string sudoku;
@@ -39,8 +39,8 @@ void solveAllInFile(std::string filename){
 			if(line != SEPARATOR){
 				sudoku += line;
 				lineCount++;
-				if(lineCount == 9){
-					solveSudoku(solver, sudoku);
+				if(lineCount == SUDOKU_SIZE){
+					solveSudoku(sudoku);
 					lineCount = 0;
 					sudoku.clear();
 				}
