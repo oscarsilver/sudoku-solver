@@ -26,6 +26,12 @@ private:
 	void initBoard();
 public:
 	Board() : _size(9), _squareSize(3), _cells(_size*_size, Cell(_size)){}
+	~Board() = default;
+	Board(const Board&) = default;
+	Board& operator=(Board& other) = delete;
+	Board(Board&&) = delete;
+	Board&& operator=(Board&& other) = delete;
+
 	Cell* getCell(int, int);
 	Cell* getMostConstrainedCell();
 	int getSize() const;
