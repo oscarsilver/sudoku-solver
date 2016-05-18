@@ -14,6 +14,9 @@
 #include <vector>
 #include "cell.h"
 
+const int BOARD_SIZE = 9;
+const int SQUARE_SIZE = 3;
+
 class Board{
 private:
 	int _size;
@@ -40,7 +43,7 @@ private:
  	 */
 	void initBoard();
 public:
-	Board() : _size(9), _squareSize(3), _cells(_size*_size, Cell(_size)){}
+	Board() : _size(BOARD_SIZE), _squareSize(SQUARE_SIZE), _cells(BOARD_SIZE*BOARD_SIZE, Cell(BOARD_SIZE)){}
 	~Board() = default;
 	Board(const Board&) = default;
 	Board& operator=(Board&) = delete;
