@@ -43,9 +43,9 @@ public:
 	Board() : _size(9), _squareSize(3), _cells(_size*_size, Cell(_size)){}
 	~Board() = default;
 	Board(const Board&) = default;
-	Board& operator=(Board& other) = delete;
+	Board& operator=(Board&) = delete;
 	Board(Board&&) = delete;
-	Board&& operator=(Board&& other) = delete;
+	Board&& operator=(Board&&) = delete;
 
 	/*
 	 *	Returns a pointer to a cell corresponding to row and column

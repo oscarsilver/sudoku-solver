@@ -20,6 +20,10 @@ private:
 public:
 	Cell() {}
 	Cell(int boardSize) : _possibleValues(boardSize, true){}
+	Cell(const Cell&) = default;
+	Cell& operator=(const Cell&) = delete;
+	Cell(Cell&&) = delete;
+	Cell&& operator=(Cell&&) = delete;
 
 	int getValue() const;
 	int getCol() const;
