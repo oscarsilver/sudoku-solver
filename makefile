@@ -14,7 +14,7 @@ sudokusolver: main.cc $(OBJS)
 	$(CXX) $(CPPFLAGS) -o sudokusolver $(OBJS)
 
 clean:
-	$(RM) $(OBJS) main.o test.o sudokusolver test
+	$(RM) $(OBJS) main.o sudokusolver
 
 dist-clean: clean
 	$(RM) tool
