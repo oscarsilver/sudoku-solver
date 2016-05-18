@@ -35,7 +35,7 @@ public:
 	bool assign(Cell*, int);
 	bool eliminate(Cell*, int);
 
-	void readBoardFromString(std::string);
+	bool readBoardFromString(std::string);
 	void printBoard();
 };
 

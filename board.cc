@@ -168,20 +168,23 @@ void Board::initBoard(){
  *	Intializes a board and assigns values to it
  *  from the input string
  */
-void Board::readBoardFromString(std::string s){
+bool Board::readBoardFromString(std::string s){
 	initBoard();
 	int i = 0, row = 0, col = 0;
 	while(i < getSize()*getSize()){
 		if(s.at(i) >= '1' && s.at(i) <= '9'){
 			row = i/getSize();
 			col = i % getSize();
-			assert(assign(getCell(row, col), s.at(i) - '0'));
+			if(!assign(getCell(row,col), s.at(i) - '0')){
+				return false;
+			}
 			i++;
 		}
 		else if(s.at(i) == '0' || s.at(i) == '.'){
 			i++;
 		}
 	}
+	return true;
 }
 
 void printHorizontalLine(std::string separator, int length){
