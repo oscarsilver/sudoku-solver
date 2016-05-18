@@ -23,18 +23,18 @@ int Board::getSquareSize() const{
 }
 
 bool Board::isSolved() const{
-	for(Cell c : _cells){
-		if(c.getPossibleValueCount() != 1){
+	for(Cell cell : _cells){
+		if(cell.getPossibleValueCount() != 1){
 			return false;
 		}
 	}
 	return true;
 }
 
-bool Board::assign(Cell* c, int val){
+bool Board::assign(Cell* cell, int val){
 	for(int i = 1; i <= getSize(); i++){
 		if(i != val){
-			if(!eliminate(c, i)){
+			if(!eliminate(cell, i)){
 				return false;
 			}
 		}
@@ -46,6 +46,7 @@ Cell* Board::getMostConstrainedCell(){
 	int nPossibleValues = getSize();
 	int minCell = 0;
 	for(int i = 0; i < _cells.size(); i++){
+		// This cell is already eliminated
 		if(_cells.at(i).getPossibleValueCount() < nPossibleValues && _cells.at(i).getPossibleValueCount() > 1){
 			nPossibleValues = _cells.at(i).getPossibleValueCount();
 			minCell = i;
@@ -57,6 +58,7 @@ Cell* Board::getMostConstrainedCell(){
 bool Board::eliminateRow(int row, int col, int val){
 	for(int i = 0; i < getSize(); i++){
 		if(i == row){
+			// This cell is already eliminated
 			continue;
 		}
 		else if(!eliminate(getCell(i, col), val)){
@@ -69,6 +71,7 @@ bool Board::eliminateRow(int row, int col, int val){
 bool Board::eliminateCol(int row, int col, int val){
 	for(int i = 0; i < getSize(); i++){
 		if(i == col){
+			// This cell is already eliminated
 			continue;
 		}
 		else if(!eliminate(getCell(row, i), val)){
@@ -90,6 +93,7 @@ bool Board::eliminateSquare(int row, int col, int val){
 		for(int j = 0; j < getSize(); j++){
 			if(isInSameSquare(row, i, col, j, getSquareSize())){
 				if(i == row && j == col){
+					// Don't eliminate this cell twice
 					continue;
 				}
 				else if(!eliminate(getCell(i,j), val)){
@@ -101,14 +105,14 @@ bool Board::eliminateSquare(int row, int col, int val){
 	return true;
 }
 
-bool Board::eliminate(Cell* c, int val){
-	if(!c->isPossible(val)){
+bool Board::eliminate(Cell* cell, int val){
+	if(!cell->isPossible(val)){
 		// The value is already eliminated
 		return true;
 	}
-	c->eliminateValue(val);
+	cell->eliminateValue(val);
 	
-	int nPossibleValues = c->getPossibleValueCount();
+	int nPossibleValues = cell->getPossibleValueCount();
 
 	if(nPossibleValues == 0){
 		// Should not remove the last possible value of a cell
@@ -117,13 +121,13 @@ bool Board::eliminate(Cell* c, int val){
 	else if(nPossibleValues == 1){
 		// If there is only one remaining value it should be removed from all
 		// other cells in the same row, column and square as this cell
-		if(!eliminateRow(c->getRow(), c->getCol(), c->getValue())){
+		if(!eliminateRow(cell->getRow(), cell->getCol(), cell->getValue())){
 			return false;
 		}
-		else if(!eliminateCol(c->getRow(), c->getCol(), c->getValue())){
+		else if(!eliminateCol(cell->getRow(), cell->getCol(), cell->getValue())){
 			return false;
 		}
-		else if(!eliminateSquare(c->getRow(), c->getCol(), c->getValue())){
+		else if(!eliminateSquare(cell->getRow(), cell->getCol(), cell->getValue())){
 			return false;
 		}
 	}
@@ -169,6 +173,7 @@ void Board::printBoard(){
 	for(int i = 0; i < getSize(); i++){
 		for(int j = 0; j < getSize(); j++){
 			if(getCell(i,j) -> getPossibleValueCount() > 1){
+				// Cell is not set yet
 				std::cout << ". ";
 			}
 			else{
