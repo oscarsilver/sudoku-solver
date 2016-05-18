@@ -1,5 +1,4 @@
 #include "board.h"
-#include <cassert>
 #include <iostream>
 
 Cell* Board::getCell(int row, int col){

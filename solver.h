@@ -3,8 +3,8 @@
 * Filename: solver.h
 * Description: 
 * Takes a sudoku board and tries to solve it recursivly.
-* If a solution is found the solved board is returned. If no solution is found
-* a nullptr is returned.
+* Returns true is the board was succesfully solved and false if no solution was found.
+* 
 */
 #ifndef _SOLVER_H_
 #define _SOLVER_H_
@@ -16,10 +16,10 @@
 class Solver{
 public:
 	/*
- 	 *	Recursivly tries to solve the sudoku by trying to assign all possible
+ 	 *	Tries to solve the sudoku recursivly by trying to assign all possible
  	 *	values to the most constrained cell.
  	 */
-	std::unique_ptr<Board> solve(std::unique_ptr<Board>);
+	bool solve(Board&);
 };
 
 

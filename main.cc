@@ -8,22 +8,21 @@ const int SUDOKU_SIZE = 9;
 
 void solveSudoku(std::string sudokuString){
 	std::cout << "Solving..." << std::endl;
-	std::unique_ptr<Board> b = std::unique_ptr<Board>(new Board());
 	Solver solver;
+	Board board;
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-	if(b->readBoardFromString(sudokuString)){
-		b->printBoard();
-		b = solver.solve(std::move(b));
+	if(board.readBoardFromString(sudokuString)){
+		board.printBoard();
+		solver.solve(board);
 		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 		auto duration = std::chrono::duration<float, std::chrono::milliseconds::period>(end - begin).count();
 		std::cout << "Solved in " << duration<< " milliseconds" << std::endl;
-		b->printBoard();
+		board.printBoard();
 	}
 	else{
 		std::cout << "Invalid Sudoku" << std::endl;
 	}
-
-	}
+}
 
 void solveAllInFile(std::string filename){
 	int lineCount = 0;

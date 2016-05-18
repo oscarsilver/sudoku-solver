@@ -1,26 +1,23 @@
 #include "solver.h"
 
-std::unique_ptr<Board> Solver::solve(std::unique_ptr<Board> board){
-	if(board == nullptr){
-		// No solution found
-		return board;
-	}
-	if(board->isSolved()){
-		return board;
+bool Solver::solve(Board& board){
+	if(board.isSolved()){
+		return true;
 	}
 
-	Cell* nextCell = board -> getMostConstrainedCell();
+	Cell* nextCell = board.getMostConstrainedCell();
 	for(int possibleValue : nextCell -> getPossibleValues()){
 		// Try to assign each possible value to the most constrained cell
-		std::unique_ptr<Board> copyBoard(new Board(*board));
-		if(copyBoard->assign(copyBoard->getCell(nextCell->getRow(), nextCell->getCol()), possibleValue)){
+		Board copyBoard(board);
+		if(copyBoard.assign(copyBoard.getCell(nextCell->getRow(), nextCell->getCol()), possibleValue)){
 			// Recursivly solve all boards where a possible value was 
 			// successfully assigned
-			if((copyBoard = solve(std::move(copyBoard)))){
-				return copyBoard;
+			if(solve(copyBoard)){
+				board = copyBoard;
+				return true;
 			}
 		}
 	}
 	// No solution found
-	return nullptr;
+	return false;
 }
