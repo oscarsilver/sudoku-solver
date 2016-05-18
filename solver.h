@@ -15,6 +15,10 @@
 
 class Solver{
 public:
+	/*
+ 	 *	Recursivly tries to solve the sudoku by trying to assign all possible
+ 	 *	values to the most constrained cell.
+ 	 */
 	std::unique_ptr<Board> solve(std::unique_ptr<Board>);
 };
 

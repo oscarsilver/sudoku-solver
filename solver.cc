@@ -1,9 +1,5 @@
 #include "solver.h"
 
-/*
- *	Recursivly tries to solve the sudoku by trying to assign all possible
- *	values to the most constrained cell.
- */
 std::unique_ptr<Board> Solver::solve(std::unique_ptr<Board> board){
 	if(board == nullptr){
 		// No solution found
